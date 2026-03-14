@@ -6,26 +6,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @layer base {
-  :root {
-    --font-size-min: 14;
-    --font-size-max: 20;
-    --font-ratio-min: 1.1;
-    --font-ratio-max: 1.33;
-    --font-width-min: 375;
-    --font-width-max: 1500;
-  }
-
   html {
-    color-scheme: light dark;
     @apply font-sans;
-  }
-
-  [data-theme="light"] {
-    color-scheme: light only;
-  }
-
-  [data-theme="dark"] {
-    color-scheme: dark only;
   }
 
   *,
@@ -35,34 +17,9 @@
   }
 
   body {
-    display: grid;
-    place-items: center;
-    background: light-dark(white, black);
-    min-height: 100vh;
-    font-family:
-      "Geist", "SF Pro Text", "SF Pro Icons", "AOS Icons", "Helvetica Neue",
-      Helvetica, Arial, sans-serif, system-ui;
     @apply bg-background text-foreground;
   }
 
-  /* body::before {
-    --size: 45px;
-    --line: color-mix(in hsl, canvasText, transparent 70%);
-    content: "";
-    height: 100vh;
-    width: 100vw;
-    position: fixed;
-    background:
-      linear-gradient(90deg, var(--line) 1px, transparent 1px var(--size)) 50%
-        50% / var(--size) var(--size),
-      linear-gradient(var(--line) 1px, transparent 1px var(--size)) 50% 50% /
-        var(--size) var(--size);
-    mask: linear-gradient(-20deg, transparent 50%, white);
-    top: 0;
-    transform-style: flat;
-    pointer-events: none;
-    z-index: -1;
-  } */
   * {
     @apply border-border outline-ring/50;
   }
@@ -101,6 +58,7 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --header-height: 56px;
 }
 
 .dark {
@@ -138,7 +96,7 @@
 }
 
 @theme inline {
-  --font-sans: 'Geist Variable', sans-serif;
+  --font-sans: "Geist Variable", sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
