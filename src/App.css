@@ -1,0 +1,109 @@
+.controls-panel {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  background: light-dark(rgba(255, 255, 255, 0.85), rgba(20, 20, 20, 0.85));
+  backdrop-filter: blur(16px);
+  border: 1px solid light-dark(rgba(0, 0, 0, 0.08), rgba(255, 255, 255, 0.08));
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  width: 260px;
+  font-size: 13px;
+  color: canvasText;
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.1);
+}
+
+.controls-title {
+  margin: 0 0 1rem;
+  font-size: 11px;
+  font-weight: 700;
+  opacity: 0.4;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.controls-section {
+  margin-bottom: 1rem;
+}
+
+.controls-section:last-child {
+  margin-bottom: 0;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+}
+
+.controls-section h4 {
+  margin: 0 0 0.6rem;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.4;
+}
+
+.section-header h4 {
+  margin-bottom: 0;
+}
+
+.control-row {
+  display: grid;
+  grid-template-columns: 3.5rem 1fr 2.75rem;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+  cursor: pointer;
+}
+
+.control-row span:first-child {
+  font-size: 12px;
+  opacity: 0.65;
+}
+
+.value {
+  font-size: 11px;
+  opacity: 0.45;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.controls-disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+input[type='range'] {
+  width: 100%;
+  accent-color: canvasText;
+  cursor: pointer;
+}
+
+input[type='color'] {
+  width: 1.75rem;
+  height: 1.5rem;
+  border: 1px solid light-dark(rgba(0, 0, 0, 0.15), rgba(255, 255, 255, 0.15));
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 1px;
+  background: none;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  cursor: pointer;
+  font-size: 11px;
+  opacity: 0.5;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.toggle input {
+  cursor: pointer;
+  accent-color: canvasText;
+}
