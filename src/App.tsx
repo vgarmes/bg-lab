@@ -23,7 +23,7 @@ function App() {
   const [selectedPreset, setSelectedPreset] = useState<Preset | null>(
     PRESETS[0],
   );
-  const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const [isPanelOpen, setIsPanelOpen] = useState(true);
   const [config, setConfig] = useState<Config>(PRESETS[0]);
 
   function setGrid(patch: Partial<Config["grid"]>) {
@@ -106,8 +106,11 @@ function App() {
           >
             <div className="h-full flex flex-col p-4 overflow-hidden">
               <div className="h-ful overflow-y-auto overflow-x-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden @container space-y-4">
+                <h3 className="text-[11px] font-bold tracking-wider text-muted-foreground">
+                  Background
+                </h3>
                 <ColorPicker
-                  label="Background"
+                  label="Color"
                   color={backgroundColor}
                   onColorChange={(v) =>
                     setConfig((prev) => ({ ...prev, backgroundColor: v }))
