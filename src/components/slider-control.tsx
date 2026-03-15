@@ -10,6 +10,7 @@ interface Props {
   min: number;
   max: number;
   step: number;
+  disabled?: boolean;
 }
 
 export function SliderControl({
@@ -19,12 +20,14 @@ export function SliderControl({
   min,
   max,
   step,
+  disabled,
 }: Props) {
   const id = useId();
   return (
     <div className="flex items-center gap-3">
       <Label
         htmlFor={id}
+        aria-disabled={disabled}
         className="text-muted-foreground font-normal text-sm flex-nowrap shrink-0 min-w-20"
       >
         {label}
@@ -36,16 +39,18 @@ export function SliderControl({
         value={value}
         onValueChange={(value) => onValueChange(value as number)}
         className="w-full"
+        disabled={disabled}
       />
       <Input
         id={id}
+        disabled={disabled}
         value={value}
         type="number"
         min={min}
         max={max}
         step={step}
         onChange={(e) => onValueChange(Number(e.target.value))}
-        className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none w-12.5 px-1.5 shrink-0"
+        className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none w-12.5 shrink-0"
       />
     </div>
   );
