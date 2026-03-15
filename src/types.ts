@@ -1,3 +1,5 @@
+import type { EFFECTS } from "./presets";
+
 export interface LinearMaskSettings {
   angle: number;
   stop: number;
@@ -27,6 +29,9 @@ export interface Config {
     linear: LinearMaskSettings;
     radial: RadialMaskSettings;
   };
+  effect: Effect | null;
 }
 
 export type Preset = Config & { name: string };
+
+export type Effect = (typeof EFFECTS)[number];

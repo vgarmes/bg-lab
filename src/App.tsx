@@ -7,12 +7,24 @@ import type { Config, Preset } from "./types";
 import { MaskControl } from "./components/mask-control";
 import { ColorPicker } from "./components/color-picker";
 import { hexToRgba } from "./utils";
-import { DEFAULT_CONFIG, PRESETS } from "./presets";
+import { EFFECTS, PRESETS } from "./presets";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./components/ui/select";
+import { Grain } from "./components/effects/grain";
+import { CRT } from "./components/effects/crt";
 
 function App() {
-  const [selectedPreset, setSelectedPreset] = useState<Preset | null>(null);
+  const [selectedPreset, setSelectedPreset] = useState<Preset | null>(
+    PRESETS[0],
+  );
   const [isPanelOpen, setIsPanelOpen] = useState(false);
-  const [config, setConfig] = useState<Config>(DEFAULT_CONFIG);
+  const [config, setConfig] = useState<Config>(PRESETS[0]);
 
   function setGrid(patch: Partial<Config["grid"]>) {
     setConfig((prev) => ({ ...prev, grid: { ...prev.grid, ...patch } }));
@@ -97,7 +109,9 @@ function App() {
                 <ColorPicker
                   label="Background"
                   color={backgroundColor}
-                  onColorChange={(v) => setConfig((prev) => ({ ...prev, backgroundColor: v }))}
+                  onColorChange={(v) =>
+                    setConfig((prev) => ({ ...prev, backgroundColor: v }))
+                  }
                 />
 
                 <Separator />
@@ -157,17 +171,34 @@ function App() {
                   onRadialMaskChange={(v) => setMask({ radial: v })}
                 />
                 <Separator />
+
+                <Select
+                  value={config.effect}
+                  onValueChange={(value) => {
+                    setConfig({ ...config, effect: value });
+                  }}
+                >
+                  <SelectTrigger className="w-full max-w-48">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {EFFECTS.map((effect) => (
+                        <SelectItem key={effect} value={effect}>
+                          {effect}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
           </aside>
 
           <div className="fixed inset-0 -z-10" style={{ backgroundColor }}>
             <div className="absolute inset-0" style={bgStyle}></div>
-          </div>
-          <div className="w-full h-full px-12 flex items-center justify-center">
-            <h1 className="text-6xl font-medium text-black">
-              Background Design Tool
-            </h1>
+            {config.effect === "grain" && <Grain />}
+            {config.effect === "vhs" && <CRT />}
           </div>
         </div>
       </div>

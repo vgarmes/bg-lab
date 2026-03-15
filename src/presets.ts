@@ -22,7 +22,11 @@ export const DEFAULT_CONFIG: Config = {
       outerStop: 110,
     },
   },
+  effect: null,
 };
+
+export const EFFECTS = ["grain", "vhs"] as const;
+
 export const PRESETS: Preset[] = [
   {
     name: "Modern Light",
@@ -43,6 +47,7 @@ export const PRESETS: Preset[] = [
         stop: 50,
       },
     },
+    effect: null,
   },
   {
     name: "Modern Dark",
@@ -63,6 +68,28 @@ export const PRESETS: Preset[] = [
         stop: 50,
       },
     },
+    effect: null,
+  },
+  {
+    name: "Purple",
+    backgroundColor: "#ffffff",
+    grid: {
+      enabled: true,
+      size: 45,
+      lineColor: "#f0f0f0",
+      lineThickness: 1,
+      lineOpacity: 20,
+    },
+    mask: {
+      ...DEFAULT_CONFIG.mask,
+      enabled: true,
+      type: "linear",
+      linear: {
+        angle: -20,
+        stop: 50,
+      },
+    },
+    effect: null,
   },
   {
     name: "Master System",
@@ -76,7 +103,9 @@ export const PRESETS: Preset[] = [
     },
     mask: {
       ...DEFAULT_CONFIG.mask,
-      enabled: false,
+      enabled: true,
+      type: "radial",
     },
+    effect: null,
   },
 ];

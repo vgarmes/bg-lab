@@ -1,4 +1,4 @@
-export function Noise() {
+export function Grain() {
   return (
     <div className="select-none opacity-[0.13] pointer-events-none z-10 -order-12 w-full h-full absolute top-0 left-0 overflow-hidden">
       <div
