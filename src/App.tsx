@@ -7,6 +7,7 @@ import { Separator } from "./components/separator";
 import { SiteHeader } from "./components/site-header";
 import type { LinearMaskSettings, RadialMaskSettings } from "./types";
 import { MaskControl } from "./components/mask-control";
+import { ColorPicker } from "./components/color-picker";
 
 function hexToRgba(hex: string, opacity: number): string {
   const r = parseInt(hex.slice(1, 3), 16);
@@ -16,6 +17,7 @@ function hexToRgba(hex: string, opacity: number): string {
 }
 
 function App() {
+  const [backgroundColor, setBackgroundColor] = useState("#ffffff");
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [gridEnabled, setGridEnabled] = useState(true);
   const [gridSize, setGridSize] = useState(45);
@@ -46,10 +48,6 @@ function App() {
       : `radial-gradient(ellipse ${radialMask.rx}% ${radialMask.ry}% at ${radialMask.posX}% ${radialMask.posY}%, #000 ${radialMask.innerStop}%, transparent ${radialMask.outerStop}%)`;
 
   const bgStyle: React.CSSProperties = {
-    position: "fixed",
-    inset: 0,
-    zIndex: -1,
-    pointerEvents: "none",
     background: gridEnabled
       ? `linear-gradient(90deg, ${line} 1px, transparent 1px ${gridSize}px) 50% 50% / ${gridSize}px ${gridSize}px,
          linear-gradient(${line} 1px, transparent 1px ${gridSize}px) 50% 50% / ${gridSize}px ${gridSize}px`
@@ -74,6 +72,14 @@ function App() {
           >
             <div className="h-full flex flex-col p-4 overflow-hidden">
               <div className="h-ful overflow-y-auto overflow-x-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden @container space-y-4">
+                <ColorPicker
+                  label="Background"
+                  color={backgroundColor}
+                  onColorChange={setBackgroundColor}
+                />
+
+                <Separator />
+
                 <div className="flex items-center justify-between gap-2">
                   <h3 className="text-[11px] font-bold tracking-wider text-muted-foreground">
                     Grid
@@ -101,27 +107,11 @@ function App() {
                   step={1}
                 />
 
-                <div className="flex items-center gap-3">
-                  <Label
-                    htmlFor="grid-color"
-                    className="text-muted-foreground font-normal text-sm flex-nowrap shrink-0 min-w-20"
-                  >
-                    Color
-                  </Label>
-                  <div className="relative">
-                    <Input
-                      type="color"
-                      value={lineColor}
-                      onChange={(e) => setLineColor(e.target.value)}
-                      className="absolute left-2 top-1/2 -translate-y-1/2 border-0 cursor-pointer p-0 h-6 w-6"
-                    />
-                    <Input
-                      className="pl-10"
-                      value={lineColor}
-                      onChange={(e) => setLineColor(e.target.value)}
-                    />
-                  </div>
-                </div>
+                <ColorPicker
+                  label="Color"
+                  color={lineColor}
+                  onColorChange={setLineColor}
+                />
 
                 <Separator />
 
@@ -139,7 +129,9 @@ function App() {
               </div>
             </div>
           </aside>
-          <div style={bgStyle}></div>
+
+          <div className="fixed inset-0 -z-10" style={{ backgroundColor }} />
+          <div className="absolute inset-0" style={bgStyle}></div>
         </div>
       </div>
     </div>
