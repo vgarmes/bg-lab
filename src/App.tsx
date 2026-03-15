@@ -9,6 +9,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "./components/ui/collapsible";
+import { SiteHeader } from "./components/site-header";
 
 function hexToRgba(hex: string, opacity: number): string {
   const r = parseInt(hex.slice(1, 3), 16);
@@ -45,7 +46,7 @@ function App() {
 
   return (
     <div className="h-dvh w-full flex flex-col">
-      <header className="border-b flex items-center justify-between px-4 sticky top-0 z-50 bg-background backdrop-blur-sm h-(--header-height)"></header>
+      <SiteHeader />
       <div className="flex-1 overflow-hidden w-full relative flex flex-col">
         <div className="flex-1 relative">
           <aside className="absolute left-0 top-0 bottom-0 w-70 bg-background/95 backdrop-blur-sm border-r transition-transform duration-300 ease-in-out z-10 translate-x-0 data-[open=false]:-translate-x-full">
