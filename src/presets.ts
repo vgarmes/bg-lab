@@ -1,7 +1,19 @@
-import type { Config, Preset } from "./types";
+import type { BackgroundConfig, Config, Effect, Preset } from "./types";
+
+export const DEFAULT_BACKGROUND: BackgroundConfig = {
+  type: "solid",
+  color: "#ffffff",
+  gradient: {
+    type: "circle",
+    color: "#d5c5ff",
+    linear: { angle: 135, fromStop: 0, toStop: 100 },
+    circle: { radius: 800, posX: 100, posY: 0, fromStop: 0, toStop: 100 },
+    ellipse: { rx: 80, ry: 50, posX: 50, posY: 0, fromStop: 0, toStop: 100 },
+  },
+};
 
 export const DEFAULT_CONFIG: Config = {
-  backgroundColor: "#ffffff",
+  background: DEFAULT_BACKGROUND,
   grid: {
     enabled: true,
     size: 45,
@@ -27,10 +39,15 @@ export const DEFAULT_CONFIG: Config = {
 
 export const EFFECTS = ["grain", "vhs"] as const;
 
+export const EFFECT_OPTIONS: Array<{ value: Effect; label: string }> = [
+  { value: "grain", label: "Grain" },
+  { value: "vhs", label: "VHS" },
+];
+
 export const PRESETS: Preset[] = [
   {
     name: "Modern Light",
-    backgroundColor: "#ffffff",
+    background: { ...DEFAULT_BACKGROUND, color: "#ffffff" },
     grid: {
       enabled: true,
       size: 45,
@@ -42,16 +59,13 @@ export const PRESETS: Preset[] = [
       ...DEFAULT_CONFIG.mask,
       enabled: true,
       type: "linear",
-      linear: {
-        angle: -20,
-        stop: 50,
-      },
+      linear: { angle: -20, stop: 50 },
     },
     effect: null,
   },
   {
     name: "Modern Dark",
-    backgroundColor: "#000000",
+    background: { ...DEFAULT_BACKGROUND, color: "#000000" },
     grid: {
       enabled: true,
       size: 45,
@@ -63,16 +77,22 @@ export const PRESETS: Preset[] = [
       ...DEFAULT_CONFIG.mask,
       enabled: true,
       type: "linear",
-      linear: {
-        angle: -20,
-        stop: 50,
-      },
+      linear: { angle: -20, stop: 50 },
     },
     effect: null,
   },
   {
     name: "Purple",
-    backgroundColor: "#ffffff",
+    background: {
+      type: "gradient",
+      color: "#000000",
+      gradient: {
+        ...DEFAULT_BACKGROUND.gradient,
+        type: "circle",
+        color: "#d5c5ff",
+        circle: { radius: 800, posX: 100, posY: 0, fromStop: 0, toStop: 100 },
+      },
+    },
     grid: {
       enabled: true,
       size: 45,
@@ -84,16 +104,13 @@ export const PRESETS: Preset[] = [
       ...DEFAULT_CONFIG.mask,
       enabled: true,
       type: "linear",
-      linear: {
-        angle: -20,
-        stop: 50,
-      },
+      linear: { angle: -20, stop: 50 },
     },
     effect: null,
   },
   {
     name: "Master System",
-    backgroundColor: "#ffffff",
+    background: { ...DEFAULT_BACKGROUND, color: "#ffffff" },
     grid: {
       enabled: true,
       size: 50,

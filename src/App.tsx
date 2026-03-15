@@ -5,9 +5,10 @@ import { Separator } from "./components/separator";
 import { SiteHeader } from "./components/site-header";
 import type { Config, Preset } from "./types";
 import { MaskControl } from "./components/mask-control";
+import { BackgroundControl } from "./components/background-control";
 import { ColorPicker } from "./components/color-picker";
-import { hexToRgba } from "./utils";
-import { EFFECTS, PRESETS } from "./presets";
+import { hexToRgba, computeBackgroundGradient } from "./utils";
+import { EFFECT_OPTIONS, EFFECTS, PRESETS } from "./presets";
 import {
   Select,
   SelectContent,
@@ -34,7 +35,7 @@ function App() {
     setConfig((prev) => ({ ...prev, mask: { ...prev.mask, ...patch } }));
   }
 
-  const { backgroundColor, grid, mask } = config;
+  const { background, grid, mask } = config;
 
   const line = hexToRgba(grid.lineColor, grid.lineOpacity);
 
@@ -106,14 +107,10 @@ function App() {
           >
             <div className="h-full flex flex-col p-4 overflow-hidden">
               <div className="h-ful overflow-y-auto overflow-x-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden @container space-y-4">
-                <h3 className="text-[11px] font-bold tracking-wider text-muted-foreground">
-                  Background
-                </h3>
-                <ColorPicker
-                  label="Color"
-                  color={backgroundColor}
-                  onColorChange={(v) =>
-                    setConfig((prev) => ({ ...prev, backgroundColor: v }))
+                <BackgroundControl
+                  background={background}
+                  onChange={(v) =>
+                    setConfig((prev) => ({ ...prev, background: v }))
                   }
                 />
 
@@ -175,20 +172,24 @@ function App() {
                 />
                 <Separator />
 
+                <h3 className="text-[11px] font-bold tracking-wider text-muted-foreground">
+                  Filter
+                </h3>
+
                 <Select
                   value={config.effect}
                   onValueChange={(value) => {
                     setConfig({ ...config, effect: value });
                   }}
                 >
-                  <SelectTrigger className="w-full max-w-48">
-                    <SelectValue />
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select a filter" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      {EFFECTS.map((effect) => (
-                        <SelectItem key={effect} value={effect}>
-                          {effect}
+                      {EFFECT_OPTIONS.map(({ label, value }) => (
+                        <SelectItem key={value} value={value}>
+                          {label}
                         </SelectItem>
                       ))}
                     </SelectGroup>
@@ -198,7 +199,15 @@ function App() {
             </div>
           </aside>
 
-          <div className="fixed inset-0 -z-10" style={{ backgroundColor }}>
+          <div
+            className="fixed inset-0 -z-10"
+            style={{
+              backgroundColor: background.color,
+              ...(background.type === "gradient" && {
+                backgroundImage: computeBackgroundGradient(background.gradient),
+              }),
+            }}
+          >
             <div className="absolute inset-0" style={bgStyle}></div>
             {config.effect === "grain" && <Grain />}
             {config.effect === "vhs" && <CRT />}

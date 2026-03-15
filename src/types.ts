@@ -14,8 +14,45 @@ export interface RadialMaskSettings {
   outerStop: number;
 }
 
+export interface LinearBgGradientSettings {
+  angle: number;
+  fromStop: number;
+  toStop: number;
+}
+
+export interface CircleBgGradientSettings {
+  radius: number;
+  posX: number;
+  posY: number;
+  fromStop: number;
+  toStop: number;
+}
+
+export interface EllipseBgGradientSettings {
+  rx: number;
+  ry: number;
+  posX: number;
+  posY: number;
+  fromStop: number;
+  toStop: number;
+}
+
+export interface BackgroundGradientConfig {
+  type: "linear" | "circle" | "ellipse";
+  color: string;
+  linear: LinearBgGradientSettings;
+  circle: CircleBgGradientSettings;
+  ellipse: EllipseBgGradientSettings;
+}
+
+export interface BackgroundConfig {
+  type: "solid" | "gradient";
+  color: string;
+  gradient: BackgroundGradientConfig;
+}
+
 export interface Config {
-  backgroundColor: string;
+  background: BackgroundConfig;
   grid: {
     enabled: boolean;
     size: number;
