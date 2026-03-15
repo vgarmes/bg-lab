@@ -1,61 +1,51 @@
 import { useState } from "react";
-import { Label } from "./components/ui/label";
-import { Input } from "./components/ui/input";
 import { Switch } from "./components/ui/switch";
 import { SliderControl } from "./components/slider-control";
 import { Separator } from "./components/separator";
 import { SiteHeader } from "./components/site-header";
-import type { LinearMaskSettings, RadialMaskSettings } from "./types";
+import type { Config, Preset } from "./types";
 import { MaskControl } from "./components/mask-control";
 import { ColorPicker } from "./components/color-picker";
-
-function hexToRgba(hex: string, opacity: number): string {
-  const r = parseInt(hex.slice(1, 3), 16);
-  const g = parseInt(hex.slice(3, 5), 16);
-  const b = parseInt(hex.slice(5, 7), 16);
-  return `rgba(${r}, ${g}, ${b}, ${opacity / 100})`;
-}
+import { hexToRgba } from "./utils";
+import { DEFAULT_CONFIG, PRESETS } from "./presets";
 
 function App() {
-  const [backgroundColor, setBackgroundColor] = useState("#ffffff");
+  const [selectedPreset, setSelectedPreset] = useState<Preset | null>(null);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
-  const [gridEnabled, setGridEnabled] = useState(true);
-  const [gridSize, setGridSize] = useState(45);
-  const [lineColor, setLineColor] = useState("#888888");
-  const [lineOpacity, setLineOpacity] = useState(30);
+  const [config, setConfig] = useState<Config>(DEFAULT_CONFIG);
 
-  const [maskEnabled, setMaskEnabled] = useState(true);
-  const [maskType, setMaskType] = useState<"linear" | "radial">("linear");
+  function setGrid(patch: Partial<Config["grid"]>) {
+    setConfig((prev) => ({ ...prev, grid: { ...prev.grid, ...patch } }));
+  }
 
-  const [linearMask, setLinearMask] = useState<LinearMaskSettings>({
-    angle: -20,
-    stop: 50,
-  });
-  const [radialMask, setRadialMask] = useState<RadialMaskSettings>({
-    rx: 80,
-    ry: 50,
-    posX: 50,
-    posY: 0,
-    innerStop: 70,
-    outerStop: 110,
-  });
+  function setMask(patch: Partial<Config["mask"]>) {
+    setConfig((prev) => ({ ...prev, mask: { ...prev.mask, ...patch } }));
+  }
 
-  const line = hexToRgba(lineColor, lineOpacity);
+  const { backgroundColor, grid, mask } = config;
+
+  const line = hexToRgba(grid.lineColor, grid.lineOpacity);
 
   const maskGradient =
-    maskType === "linear"
-      ? `linear-gradient(${linearMask.angle}deg, transparent ${linearMask.stop}%, white)`
-      : `radial-gradient(ellipse ${radialMask.rx}% ${radialMask.ry}% at ${radialMask.posX}% ${radialMask.posY}%, #000 ${radialMask.innerStop}%, transparent ${radialMask.outerStop}%)`;
+    mask.type === "linear"
+      ? `linear-gradient(${mask.linear.angle}deg, transparent ${mask.linear.stop}%, white)`
+      : `radial-gradient(ellipse ${mask.radial.rx}% ${mask.radial.ry}% at ${mask.radial.posX}% ${mask.radial.posY}%, #000 ${mask.radial.innerStop}%, transparent ${mask.radial.outerStop}%)`;
 
   const bgStyle: React.CSSProperties = {
-    background: gridEnabled
-      ? `linear-gradient(90deg, ${line} 1px, transparent 1px ${gridSize}px) 50% 50% / ${gridSize}px ${gridSize}px,
-         linear-gradient(${line} 1px, transparent 1px ${gridSize}px) 50% 50% / ${gridSize}px ${gridSize}px`
+    background: grid.enabled
+      ? `linear-gradient(90deg, ${line} ${grid.lineThickness}px, transparent ${grid.lineThickness}px ${grid.size}px) 50% 50% / ${grid.size}px ${grid.size}px,
+         linear-gradient(${line} ${grid.lineThickness}px, transparent ${grid.lineThickness}px ${grid.size}px) 50% 50% / ${grid.size}px ${grid.size}px`
       : "none",
-    ...(maskEnabled && {
+    ...(mask.enabled && {
       WebkitMask: maskGradient,
       mask: maskGradient,
     }),
+  };
+
+  const handleApplyPreset = (preset: Preset) => {
+    setSelectedPreset(preset);
+    const { name: _name, ...presetConfig } = preset;
+    setConfig(presetConfig);
   };
 
   return (
@@ -72,10 +62,42 @@ function App() {
           >
             <div className="h-full flex flex-col p-4 overflow-hidden">
               <div className="h-ful overflow-y-auto overflow-x-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden @container space-y-4">
+                Presets
+                <div className="relative rounded-md border border-border p-1 group">
+                  <div className="flex flex-col overflow-visible h-50">
+                    <div className="flex-1 overflow-y-auto overflow-x-hidden px-0 pb-0 min-h-0 grid grid-cols-3 gap-2">
+                      {PRESETS.map((preset) => (
+                        <button
+                          key={preset.name}
+                          onClick={() => {
+                            handleApplyPreset(preset);
+                          }}
+                          className="rounded-md border-2 w-full p-1 overflow-hidden transition-all cursor-pointer aspect-square border-transparent hover:border-muted-foreground/50 bg-muted/30 aria-pressed:border-foreground"
+                          aria-pressed={preset.name === selectedPreset?.name}
+                          title={preset.name}
+                        >
+                          <img
+                            className="w-full h-full object-contain"
+                            src="https://efecto.app/thumbnails/duck.png"
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </aside>
+          <aside
+            data-open={isPanelOpen}
+            className="absolute right-0 top-0 bottom-0 w-70 bg-background/95 backdrop-blur-sm border-r transition-transform duration-300 ease-in-out z-10 translate-x-0 data-[open=false]:translate-x-full"
+          >
+            <div className="h-full flex flex-col p-4 overflow-hidden">
+              <div className="h-ful overflow-y-auto overflow-x-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden @container space-y-4">
                 <ColorPicker
                   label="Background"
                   color={backgroundColor}
-                  onColorChange={setBackgroundColor}
+                  onColorChange={(v) => setConfig((prev) => ({ ...prev, backgroundColor: v }))}
                 />
 
                 <Separator />
@@ -85,23 +107,32 @@ function App() {
                     Grid
                   </h3>
                   <Switch
-                    checked={gridEnabled}
-                    onCheckedChange={(checked) => setGridEnabled(checked)}
+                    checked={grid.enabled}
+                    onCheckedChange={(checked) => setGrid({ enabled: checked })}
                   />
                 </div>
                 <SliderControl
                   label="Size"
-                  value={gridSize}
-                  onValueChange={setGridSize}
+                  value={grid.size}
+                  onValueChange={(v) => setGrid({ size: v })}
                   min={10}
                   max={100}
                   step={1}
                 />
 
                 <SliderControl
+                  label="Thickness"
+                  value={grid.lineThickness}
+                  onValueChange={(v) => setGrid({ lineThickness: v })}
+                  min={1}
+                  max={10}
+                  step={1}
+                />
+
+                <SliderControl
                   label="Opacity"
-                  value={lineOpacity}
-                  onValueChange={setLineOpacity}
+                  value={grid.lineOpacity}
+                  onValueChange={(v) => setGrid({ lineOpacity: v })}
                   min={0}
                   max={100}
                   step={1}
@@ -109,29 +140,35 @@ function App() {
 
                 <ColorPicker
                   label="Color"
-                  color={lineColor}
-                  onColorChange={setLineColor}
+                  color={grid.lineColor}
+                  onColorChange={(v) => setGrid({ lineColor: v })}
                 />
 
                 <Separator />
 
                 <MaskControl
-                  linearMask={linearMask}
-                  radialMask={radialMask}
-                  maskEnabled={maskEnabled}
-                  maskType={maskType}
-                  onMaskEnabledChange={setMaskEnabled}
-                  onMaskTypeChange={(type) => setMaskType(type)}
-                  onLinearMaskChange={setLinearMask}
-                  onRadialMaskChange={setRadialMask}
+                  linearMask={mask.linear}
+                  radialMask={mask.radial}
+                  maskEnabled={mask.enabled}
+                  maskType={mask.type}
+                  onMaskEnabledChange={(v) => setMask({ enabled: v })}
+                  onMaskTypeChange={(v) => setMask({ type: v })}
+                  onLinearMaskChange={(v) => setMask({ linear: v })}
+                  onRadialMaskChange={(v) => setMask({ radial: v })}
                 />
                 <Separator />
               </div>
             </div>
           </aside>
 
-          <div className="fixed inset-0 -z-10" style={{ backgroundColor }} />
-          <div className="absolute inset-0" style={bgStyle}></div>
+          <div className="fixed inset-0 -z-10" style={{ backgroundColor }}>
+            <div className="absolute inset-0" style={bgStyle}></div>
+          </div>
+          <div className="w-full h-full px-12 flex items-center justify-center">
+            <h1 className="text-6xl font-medium text-black">
+              Background Design Tool
+            </h1>
+          </div>
         </div>
       </div>
     </div>
