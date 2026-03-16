@@ -1,29 +1,14 @@
 import { useState } from "react";
-import { Switch } from "./components/ui/switch";
-import { SliderControl } from "./components/slider-control";
-import { Separator } from "./components/separator";
 import { SiteHeader } from "./components/site-header";
-import type { Config, Preset } from "./types";
-import { MaskControl } from "./components/mask-control";
-import { BackgroundControl } from "./components/background-control";
-import { ColorPicker } from "./components/color-picker";
+import type { BackgroundConfig, Config } from "./types";
 import { hexToRgba, computeBackgroundGradient } from "./utils";
-import { EFFECT_OPTIONS, EFFECTS, PRESETS } from "./presets";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./components/ui/select";
+import { PRESETS } from "./presets";
 import { Grain } from "./components/effects/grain";
 import { CRT } from "./components/effects/crt";
+import { LeftSidebar } from "./components/left-sidebar";
+import { RightSidebar } from "./components/right-sidebar";
 
 function App() {
-  const [selectedPreset, setSelectedPreset] = useState<Preset | null>(
-    PRESETS[0],
-  );
   const [isPanelOpen, setIsPanelOpen] = useState(true);
   const [config, setConfig] = useState<Config>(PRESETS[0]);
 
@@ -44,10 +29,12 @@ function App() {
       ? `linear-gradient(${mask.linear.angle}deg, transparent ${mask.linear.stop}%, white)`
       : `radial-gradient(ellipse ${mask.radial.rx}% ${mask.radial.ry}% at ${mask.radial.posX}% ${mask.radial.posY}%, #000 ${mask.radial.innerStop}%, transparent ${mask.radial.outerStop}%)`;
 
-  const bgStyle: React.CSSProperties = {
+  const bgStyle: Record<string, string> & React.CSSProperties = {
+    "--line": line,
+    "--size": grid.size + "px",
     background: grid.enabled
-      ? `linear-gradient(90deg, ${line} ${grid.lineThickness}px, transparent ${grid.lineThickness}px ${grid.size}px) 50% 50% / ${grid.size}px ${grid.size}px,
-         linear-gradient(${line} ${grid.lineThickness}px, transparent ${grid.lineThickness}px ${grid.size}px) 50% 50% / ${grid.size}px ${grid.size}px`
+      ? `linear-gradient(90deg,var(--line)1px,transparent 1px var(--size))calc(var(--size)*.36)50%/var(--size)var(--size),
+      linear-gradient(var(--line)1px,transparent 1px var(--size))0% calc(var(--size)*.32)/var(--size)var(--size)`
       : "none",
     ...(mask.enabled && {
       WebkitMask: maskGradient,
@@ -55,10 +42,8 @@ function App() {
     }),
   };
 
-  const handleApplyPreset = (preset: Preset) => {
-    setSelectedPreset(preset);
-    const { name: _name, ...presetConfig } = preset;
-    setConfig(presetConfig);
+  const handleBackgroundChange = (values: Partial<BackgroundConfig>) => {
+    setConfig({ ...config, background: { ...config.background, ...values } });
   };
 
   return (
@@ -69,135 +54,22 @@ function App() {
       />
       <div className="flex-1 overflow-hidden w-full relative flex flex-col">
         <div className="flex-1 relative">
-          <aside
-            data-open={isPanelOpen}
-            className="absolute left-0 top-0 bottom-0 w-70 bg-background/95 backdrop-blur-sm border-r transition-transform duration-300 ease-in-out z-10 translate-x-0 data-[open=false]:-translate-x-full"
-          >
-            <div className="h-full flex flex-col p-4 overflow-hidden">
-              <div className="h-ful overflow-y-auto overflow-x-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden @container space-y-4">
-                Presets
-                <div className="relative rounded-md border border-border p-1 group">
-                  <div className="flex flex-col overflow-visible h-50">
-                    <div className="flex-1 overflow-y-auto overflow-x-hidden px-0 pb-0 min-h-0 grid grid-cols-3 gap-2">
-                      {PRESETS.map((preset) => (
-                        <button
-                          key={preset.name}
-                          onClick={() => {
-                            handleApplyPreset(preset);
-                          }}
-                          className="rounded-md border-2 w-full p-1 overflow-hidden transition-all cursor-pointer aspect-square border-transparent hover:border-muted-foreground/50 bg-muted/30 aria-pressed:border-foreground"
-                          aria-pressed={preset.name === selectedPreset?.name}
-                          title={preset.name}
-                        >
-                          <img
-                            className="w-full h-full object-contain"
-                            src="https://efecto.app/thumbnails/duck.png"
-                          />
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </aside>
-          <aside
-            data-open={isPanelOpen}
-            className="absolute right-0 top-0 bottom-0 w-70 bg-background/95 backdrop-blur-sm border-r transition-transform duration-300 ease-in-out z-10 translate-x-0 data-[open=false]:translate-x-full"
-          >
-            <div className="h-full flex flex-col p-4 overflow-hidden">
-              <div className="h-ful overflow-y-auto overflow-x-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden @container space-y-4">
-                <BackgroundControl
-                  background={background}
-                  onChange={(v) =>
-                    setConfig((prev) => ({ ...prev, background: v }))
-                  }
-                />
-
-                <Separator />
-
-                <div className="flex items-center justify-between gap-2">
-                  <h3 className="text-[11px] font-bold tracking-wider text-muted-foreground">
-                    Grid
-                  </h3>
-                  <Switch
-                    checked={grid.enabled}
-                    onCheckedChange={(checked) => setGrid({ enabled: checked })}
-                  />
-                </div>
-                <SliderControl
-                  label="Size"
-                  value={grid.size}
-                  onValueChange={(v) => setGrid({ size: v })}
-                  min={10}
-                  max={100}
-                  step={1}
-                />
-
-                <SliderControl
-                  label="Thickness"
-                  value={grid.lineThickness}
-                  onValueChange={(v) => setGrid({ lineThickness: v })}
-                  min={1}
-                  max={10}
-                  step={1}
-                />
-
-                <SliderControl
-                  label="Opacity"
-                  value={grid.lineOpacity}
-                  onValueChange={(v) => setGrid({ lineOpacity: v })}
-                  min={0}
-                  max={100}
-                  step={1}
-                />
-
-                <ColorPicker
-                  label="Color"
-                  color={grid.lineColor}
-                  onColorChange={(v) => setGrid({ lineColor: v })}
-                />
-
-                <Separator />
-
-                <MaskControl
-                  linearMask={mask.linear}
-                  radialMask={mask.radial}
-                  maskEnabled={mask.enabled}
-                  maskType={mask.type}
-                  onMaskEnabledChange={(v) => setMask({ enabled: v })}
-                  onMaskTypeChange={(v) => setMask({ type: v })}
-                  onLinearMaskChange={(v) => setMask({ linear: v })}
-                  onRadialMaskChange={(v) => setMask({ radial: v })}
-                />
-                <Separator />
-
-                <h3 className="text-[11px] font-bold tracking-wider text-muted-foreground">
-                  Filter
-                </h3>
-
-                <Select
-                  value={config.effect}
-                  onValueChange={(value) => {
-                    setConfig({ ...config, effect: value });
-                  }}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select a filter" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      {EFFECT_OPTIONS.map(({ label, value }) => (
-                        <SelectItem key={value} value={value}>
-                          {label}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-          </aside>
+          <LeftSidebar
+            open={isPanelOpen}
+            background={config.background}
+            onChange={handleBackgroundChange}
+          />
+          <RightSidebar
+            open={isPanelOpen}
+            mask={config.mask}
+            grid={config.grid}
+            effect={config.effect}
+            onGridChange={setGrid}
+            onMaskChange={setMask}
+            onEffectChange={(value) => {
+              setConfig({ ...config, effect: value });
+            }}
+          />
 
           <div
             className="fixed inset-0 -z-10"

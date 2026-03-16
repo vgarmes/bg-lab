@@ -51,21 +51,25 @@ export interface BackgroundConfig {
   gradient: BackgroundGradientConfig;
 }
 
+export interface GridConfig {
+  enabled: boolean;
+  size: number;
+  lineColor: string;
+  lineOpacity: number;
+  lineThickness: number;
+}
+
+export interface MaskConfig {
+  enabled: boolean;
+  type: "linear" | "radial";
+  linear: LinearMaskSettings;
+  radial: RadialMaskSettings;
+}
+
 export interface Config {
   background: BackgroundConfig;
-  grid: {
-    enabled: boolean;
-    size: number;
-    lineColor: string;
-    lineOpacity: number;
-    lineThickness: number;
-  };
-  mask: {
-    enabled: boolean;
-    type: "linear" | "radial";
-    linear: LinearMaskSettings;
-    radial: RadialMaskSettings;
-  };
+  grid: GridConfig;
+  mask: MaskConfig;
   effect: Effect | null;
 }
 
