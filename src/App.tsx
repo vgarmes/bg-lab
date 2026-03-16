@@ -7,6 +7,7 @@ import { Grain } from "./components/effects/grain";
 import { CRT } from "./components/effects/crt";
 import { LeftSidebar } from "./components/left-sidebar";
 import { RightSidebar } from "./components/right-sidebar";
+import { Sparkles, Wallpaper } from "lucide-react";
 
 function App() {
   const [isPanelOpen, setIsPanelOpen] = useState(true);
@@ -53,7 +54,7 @@ function App() {
         onTogglePanel={() => setIsPanelOpen(!isPanelOpen)}
       />
       <div className="flex-1 overflow-hidden w-full relative flex flex-col">
-        <div className="flex-1 relative">
+        <div className="flex-1 relative overflow-hidden">
           <LeftSidebar
             open={isPanelOpen}
             background={config.background}
@@ -84,6 +85,16 @@ function App() {
             {config.effect === "grain" && <Grain />}
             {config.effect === "vhs" && <CRT />}
           </div>
+        </div>
+        <div className="flex lg:hidden items-stretch border-t bg-background">
+          <button className="flex flex-col items-center justify-center gap-1 flex-1 py-2 transition-colors text-muted-foreground">
+            <Wallpaper className="size-5" />
+            <span className="text-xs font-medium">Background</span>
+          </button>
+          <button className="flex flex-col items-center justify-center gap-1 flex-1 py-2 transition-colors text-muted-foreground">
+            <Sparkles className="size-5" />
+            <span className="text-xs font-medium">Effects</span>
+          </button>
         </div>
       </div>
     </div>
