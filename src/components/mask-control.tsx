@@ -1,28 +1,27 @@
-import type { LinearMaskSettings, RadialMaskSettings } from "@/types";
+import type {
+  LinearMaskSettings,
+  MaskConfig,
+  RadialMaskSettings,
+} from "@/types";
 import { SliderControl } from "./slider-control";
 import { Switch } from "./ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 
 interface Props {
-  maskEnabled: boolean;
-  onMaskEnabledChange: (enabled: boolean) => void;
-  maskType: "linear" | "radial";
-  onMaskTypeChange: (type: "linear" | "radial") => void;
-  linearMask: LinearMaskSettings;
-  onLinearMaskChange: (settings: LinearMaskSettings) => void;
-  radialMask: RadialMaskSettings;
-  onRadialMaskChange: (settings: RadialMaskSettings) => void;
+  mask: MaskConfig;
+  onMaskChange: (value: Partial<MaskConfig>) => void;
 }
-export function MaskControl({
-  maskEnabled,
-  onMaskEnabledChange,
-  maskType,
-  onMaskTypeChange,
-  linearMask,
-  onLinearMaskChange,
-  radialMask,
-  onRadialMaskChange,
-}: Props) {
+export function MaskControl({ mask, onMaskChange }: Props) {
+  const { enabled, type, linear, radial } = mask;
+
+  const handleLinearMaskChange = (values: Partial<LinearMaskSettings>) => {
+    onMaskChange({ linear: { ...mask.linear, ...values } });
+  };
+
+  const handleRadialMaskChange = (values: Partial<RadialMaskSettings>) => {
+    onMaskChange({ radial: { ...mask.radial, ...values } });
+  };
+
   return (
     <>
       <div className="flex items-center justify-between gap-2">
@@ -31,14 +30,18 @@ export function MaskControl({
         </h3>
         <Switch
           id="mask-enable"
-          checked={maskEnabled}
-          onCheckedChange={onMaskEnabledChange}
+          checked={enabled}
+          onCheckedChange={(checked) => {
+            onMaskChange({ enabled: checked });
+          }}
         />
       </div>
 
       <Tabs
-        value={maskType}
-        onValueChange={onMaskTypeChange}
+        value={type}
+        onValueChange={(value) => {
+          onMaskChange({ type: value });
+        }}
         className="space-y-2"
       >
         <TabsList className="w-full">
@@ -48,20 +51,16 @@ export function MaskControl({
         <TabsContent value="linear" className="space-y-4">
           <SliderControl
             label="Direction"
-            value={linearMask.angle}
-            onValueChange={(value) =>
-              onLinearMaskChange({ ...linearMask, angle: value })
-            }
+            value={linear.angle}
+            onValueChange={(value) => handleLinearMaskChange({ angle: value })}
             min={-180}
             max={180}
             step={1}
           />
           <SliderControl
             label="Start"
-            value={linearMask.stop}
-            onValueChange={(value) =>
-              onLinearMaskChange({ ...linearMask, stop: value })
-            }
+            value={linear.stop}
+            onValueChange={(value) => handleLinearMaskChange({ stop: value })}
             min={0}
             max={100}
             step={1}
@@ -70,49 +69,41 @@ export function MaskControl({
         <TabsContent value="radial" className="space-y-4">
           <SliderControl
             label="Rx"
-            value={radialMask.rx}
-            onValueChange={(value) =>
-              onRadialMaskChange({ ...radialMask, rx: value })
-            }
+            value={radial.rx}
+            onValueChange={(value) => handleRadialMaskChange({ rx: value })}
             min={0}
             max={200}
             step={1}
           />
           <SliderControl
             label="Ry"
-            value={radialMask.ry}
-            onValueChange={(value) =>
-              onRadialMaskChange({ ...radialMask, ry: value })
-            }
+            value={radial.ry}
+            onValueChange={(value) => handleRadialMaskChange({ ry: value })}
             min={0}
             max={200}
             step={1}
           />
           <SliderControl
             label="Pos X"
-            value={radialMask.posX}
-            onValueChange={(value) =>
-              onRadialMaskChange({ ...radialMask, posX: value })
-            }
+            value={radial.posX}
+            onValueChange={(value) => handleRadialMaskChange({ posX: value })}
             min={0}
             max={100}
             step={1}
           />
           <SliderControl
             label="Pos Y"
-            value={radialMask.posY}
-            onValueChange={(value) =>
-              onRadialMaskChange({ ...radialMask, posY: value })
-            }
+            value={radial.posY}
+            onValueChange={(value) => handleRadialMaskChange({ posY: value })}
             min={0}
             max={100}
             step={1}
           />
           <SliderControl
             label="Inner"
-            value={radialMask.innerStop}
+            value={radial.innerStop}
             onValueChange={(value) =>
-              onRadialMaskChange({ ...radialMask, innerStop: value })
+              handleRadialMaskChange({ innerStop: value })
             }
             min={0}
             max={150}
@@ -120,9 +111,9 @@ export function MaskControl({
           />
           <SliderControl
             label="Outer"
-            value={radialMask.outerStop}
+            value={radial.outerStop}
             onValueChange={(value) =>
-              onRadialMaskChange({ ...radialMask, outerStop: value })
+              handleRadialMaskChange({ outerStop: value })
             }
             min={0}
             max={150}
