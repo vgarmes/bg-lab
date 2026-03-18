@@ -23,6 +23,7 @@ export function EffectControl({ effect, onChange }: Props) {
       <Select
         value={effect ?? undefined}
         onValueChange={(v) => onChange(v as Effect)}
+        items={EFFECT_OPTIONS}
       >
         <SelectTrigger className="w-full">
           <SelectValue placeholder="Select a filter" />

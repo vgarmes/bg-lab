@@ -53,7 +53,10 @@ export interface BackgroundConfig {
 
 export interface GridConfig {
   enabled: boolean;
-  size: number;
+  sizeX: number;
+  sizeY: number;
+  shiftX: number;
+  shiftY: number;
   lineColor: string;
   lineOpacity: number;
   lineThickness: number;

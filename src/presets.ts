@@ -16,7 +16,10 @@ export const DEFAULT_CONFIG: Config = {
   background: DEFAULT_BACKGROUND,
   grid: {
     enabled: true,
-    size: 45,
+    sizeX: 45,
+    sizeY: 45,
+    shiftX: 0.36,
+    shiftY: 0.32,
     lineColor: "#888888",
     lineOpacity: 100,
     lineThickness: 1,
@@ -44,13 +47,49 @@ export const EFFECT_OPTIONS: Array<{ value: Effect; label: string }> = [
   { value: "vhs", label: "VHS" },
 ];
 
+/*
+<div class="absolute inset-0 -z-10 h-full w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem]">
+<div class="absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_800px_at_100%_200px,#d5c5ff,transparent)]"></div></div>
+*/
+
 export const PRESETS: Preset[] = [
+  {
+    name: "Purple",
+    background: {
+      type: "gradient",
+      color: "#ffffff",
+      gradient: {
+        ...DEFAULT_BACKGROUND.gradient,
+        type: "circle",
+        color: "#d5c5ff",
+        circle: { radius: 800, posX: 100, posY: 0, fromStop: 0, toStop: 100 },
+      },
+    },
+    grid: {
+      enabled: true,
+      sizeX: 95,
+      sizeY: 60,
+      shiftX: 0,
+      shiftY: 0,
+      lineColor: "#f0f0f0",
+      lineThickness: 1,
+      lineOpacity: 100,
+    },
+    mask: {
+      ...DEFAULT_CONFIG.mask,
+      enabled: false,
+    },
+    effect: null,
+  },
   {
     name: "Modern Light",
     background: { ...DEFAULT_BACKGROUND, color: "#ffffff" },
     grid: {
       enabled: true,
-      size: 45,
+      sizeX: 100,
+      sizeY: 100,
+      shiftX: 0.36,
+      shiftY: 0.32,
       lineColor: "#000000",
       lineThickness: 1,
       lineOpacity: 10,
@@ -68,7 +107,10 @@ export const PRESETS: Preset[] = [
     background: { ...DEFAULT_BACKGROUND, color: "#000000" },
     grid: {
       enabled: true,
-      size: 45,
+      sizeX: 45,
+      sizeY: 45,
+      shiftX: 0.36,
+      shiftY: 0.32,
       lineColor: "#ffffff",
       lineThickness: 1,
       lineOpacity: 20,
@@ -81,39 +123,16 @@ export const PRESETS: Preset[] = [
     },
     effect: null,
   },
-  {
-    name: "Purple",
-    background: {
-      type: "gradient",
-      color: "#000000",
-      gradient: {
-        ...DEFAULT_BACKGROUND.gradient,
-        type: "circle",
-        color: "#d5c5ff",
-        circle: { radius: 800, posX: 100, posY: 0, fromStop: 0, toStop: 100 },
-      },
-    },
-    grid: {
-      enabled: true,
-      size: 45,
-      lineColor: "#f0f0f0",
-      lineThickness: 1,
-      lineOpacity: 20,
-    },
-    mask: {
-      ...DEFAULT_CONFIG.mask,
-      enabled: true,
-      type: "linear",
-      linear: { angle: -20, stop: 50 },
-    },
-    effect: null,
-  },
+
   {
     name: "Master System",
     background: { ...DEFAULT_BACKGROUND, color: "#ffffff" },
     grid: {
       enabled: true,
-      size: 50,
+      sizeX: 50,
+      sizeY: 50,
+      shiftX: 0.36,
+      shiftY: 0.32,
       lineColor: "#7d7d7d",
       lineThickness: 2,
       lineOpacity: 50,

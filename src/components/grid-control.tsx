@@ -21,12 +21,36 @@ export function GridControl({ grid, onChange }: Props) {
         />
       </div>
       <SliderControl
-        label="Size"
-        value={grid.size}
-        onValueChange={(v) => onChange({ size: v })}
+        label="Size X"
+        value={grid.sizeX}
+        onValueChange={(v) => onChange({ sizeX: v })}
         min={10}
-        max={100}
+        max={200}
         step={1}
+      />
+      <SliderControl
+        label="Size Y"
+        value={grid.sizeY}
+        onValueChange={(v) => onChange({ sizeY: v })}
+        min={10}
+        max={200}
+        step={1}
+      />
+      <SliderControl
+        label="Shift X"
+        value={grid.shiftX}
+        onValueChange={(v) => onChange({ shiftX: v })}
+        min={0}
+        max={1}
+        step={0.01}
+      />
+      <SliderControl
+        label="Shift Y"
+        value={grid.shiftY}
+        onValueChange={(v) => onChange({ shiftY: v })}
+        min={0}
+        max={1}
+        step={0.01}
       />
       <SliderControl
         label="Thickness"
