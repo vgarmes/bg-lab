@@ -27,6 +27,7 @@ export function GridControl({ grid, onChange }: Props) {
         min={10}
         max={200}
         step={1}
+        disabled={!grid.enabled}
       />
       <SliderControl
         label="Size Y"
@@ -35,6 +36,7 @@ export function GridControl({ grid, onChange }: Props) {
         min={10}
         max={200}
         step={1}
+        disabled={!grid.enabled}
       />
       <SliderControl
         label="Shift X"
@@ -43,6 +45,7 @@ export function GridControl({ grid, onChange }: Props) {
         min={0}
         max={1}
         step={0.01}
+        disabled={!grid.enabled}
       />
       <SliderControl
         label="Shift Y"
@@ -51,6 +54,7 @@ export function GridControl({ grid, onChange }: Props) {
         min={0}
         max={1}
         step={0.01}
+        disabled={!grid.enabled}
       />
       <SliderControl
         label="Thickness"
@@ -59,6 +63,7 @@ export function GridControl({ grid, onChange }: Props) {
         min={1}
         max={10}
         step={1}
+        disabled={!grid.enabled}
       />
       <SliderControl
         label="Opacity"
@@ -67,11 +72,13 @@ export function GridControl({ grid, onChange }: Props) {
         min={0}
         max={100}
         step={1}
+        disabled={!grid.enabled}
       />
       <ColorPicker
         label="Color"
         color={grid.lineColor}
         onColorChange={(v) => onChange({ lineColor: v })}
+        disabled={!grid.enabled}
       />
     </div>
   );

@@ -26,7 +26,7 @@ export function LeftSidebar({
     >
       <div className="h-full flex flex-col p-4 overflow-hidden">
         <div className="h-full overflow-y-auto overflow-x-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden @container space-y-4">
-          <h2>Presets</h2>
+          <h2 className="text-sm font-semibold">Presets</h2>
           <div className="relative rounded-md border border-border p-1 group">
             <div className="flex flex-col overflow-visible h-50">
               <div className="flex-1 overflow-y-auto overflow-x-hidden px-0 pb-0 min-h-0 grid grid-cols-3 gap-2 content-start">
@@ -57,7 +57,7 @@ export function LeftSidebar({
               </div>
             </div>
           </div>
-          <h2 className="text-md font-semibold">Background</h2>
+          <h2 className="text-sm font-semibold">Parameters</h2>
           <BackgroundControl background={background} onChange={onChange} />
         </div>
       </div>

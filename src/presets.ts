@@ -131,3 +131,10 @@ export const PRESETS: Preset[] = [
     effect: null,
   },
 ];
+
+/*
+<div class="relative h-full w-full bg-slate-950">
+<div class="absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_500px_at_50%_200px,#3e3e3e,transparent)]"></div></div>
+
+<div class="absolute inset-0 -z-10 h-full w-full bg-white [background:radial-gradient(125%_125%_at_50%_10%,#fff_40%,#63e_100%)]"></div>
+*/

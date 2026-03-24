@@ -28,7 +28,7 @@ export function SliderControl({
       <Label
         htmlFor={id}
         aria-disabled={disabled}
-        className="text-muted-foreground font-normal text-sm flex-nowrap shrink-0 min-w-20"
+        className="text-muted-foreground font-normal text-sm flex-nowrap shrink-0 min-w-20 aria-disabled:opacity-50"
       >
         {label}
       </Label>
