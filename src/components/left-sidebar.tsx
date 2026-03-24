@@ -45,13 +45,22 @@ export function LeftSidebar({
                       aria-pressed={preset.name === selectedPresetName}
                       title={preset.name}
                     />
-                    <Background
-                      className="absolute"
-                      background={preset.background}
-                      grid={preset.grid}
-                      mask={preset.mask}
-                      effect={preset.effect}
-                    />
+                    <div
+                      className="absolute origin-top-left pointer-events-none"
+                      style={{
+                        width: `${100 / 0.5}%`,
+                        height: `${100 / 0.5}%`,
+                        transform: `scale(0.5)`,
+                      }}
+                    >
+                      <Background
+                        className="absolute"
+                        background={preset.background}
+                        grid={preset.grid}
+                        mask={preset.mask}
+                        effect={preset.effect}
+                      />
+                    </div>
                   </div>
                 ))}
               </div>
