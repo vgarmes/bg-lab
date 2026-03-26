@@ -2,6 +2,7 @@ import type { GridConfig } from "@/types";
 import { ColorPicker } from "./color-picker";
 import { SliderControl } from "./slider-control";
 import { Switch } from "./ui/switch";
+import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
 
 interface Props {
   grid: GridConfig;
@@ -20,6 +21,21 @@ export function GridControl({ grid, onChange }: Props) {
           onCheckedChange={(checked) => onChange({ enabled: checked })}
         />
       </div>
+      <h4 className="text-xs text-muted-foreground mb-1.5 block">Style</h4>
+      <ToggleGroup
+        size="sm"
+        variant="outline"
+        spacing={2}
+        className="grid grid-cols-2 w-full"
+        value={[grid.shape]}
+        onValueChange={(value) =>
+          value[0] && onChange({ shape: value[0] as GridConfig["shape"] })
+        }
+        disabled={!grid.enabled}
+      >
+        <ToggleGroupItem value="lines">Lines</ToggleGroupItem>
+        <ToggleGroupItem value="dots">Dots</ToggleGroupItem>
+      </ToggleGroup>
       <SliderControl
         label="Size X"
         value={grid.sizeX}
@@ -57,7 +73,7 @@ export function GridControl({ grid, onChange }: Props) {
         disabled={!grid.enabled}
       />
       <SliderControl
-        label="Thickness"
+        label={grid.shape === "dots" ? "Radius" : "Thickness"}
         value={grid.lineThickness}
         onValueChange={(v) => onChange({ lineThickness: v })}
         min={1}

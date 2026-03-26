@@ -16,6 +16,7 @@ export const DEFAULT_CONFIG: Config = {
   background: DEFAULT_BACKGROUND,
   grid: {
     enabled: true,
+    shape: "lines",
     sizeX: 45,
     sizeY: 45,
     shiftX: 0.36,
@@ -67,6 +68,7 @@ export const PRESETS: Preset[] = [
     },
     grid: {
       enabled: true,
+      shape: "lines",
       sizeX: 95,
       sizeY: 60,
       shiftX: 0,
@@ -86,6 +88,7 @@ export const PRESETS: Preset[] = [
     background: { ...DEFAULT_BACKGROUND, color: "#000000" },
     grid: {
       enabled: true,
+      shape: "lines",
       sizeX: 45,
       sizeY: 45,
       shiftX: 0.36,
@@ -107,6 +110,7 @@ export const PRESETS: Preset[] = [
     background: { ...DEFAULT_BACKGROUND, color: "#ffffff" },
     grid: {
       enabled: true,
+      shape: "lines",
       sizeX: 50,
       sizeY: 50,
       shiftX: 0.5,

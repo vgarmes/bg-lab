@@ -53,6 +53,7 @@ export interface BackgroundConfig {
 
 export interface GridConfig {
   enabled: boolean;
+  shape: "lines" | "dots";
   sizeX: number;
   sizeY: number;
   shiftX: number;

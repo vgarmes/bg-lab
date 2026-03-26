@@ -75,8 +75,9 @@ export function getGridStyle({
     "--sx": grid.sizeX + "px",
     "--sy": grid.sizeY + "px",
     background: grid.enabled
-      ? `linear-gradient(90deg,var(--line)1px,transparent 1px var(--sx))calc(var(--sx)*${grid.shiftX})50%/var(--sx)var(--sy),
-      linear-gradient(var(--line)1px,transparent 1px var(--sy))0% calc(var(--sy)*${grid.shiftY})/var(--sx)var(--sy)`
+      ? grid.shape === "dots"
+        ? `radial-gradient(circle,var(--line)${grid.lineThickness}px,transparent ${grid.lineThickness}px) calc(var(--sx)*${grid.shiftX}) calc(var(--sy)*${grid.shiftY})/var(--sx)var(--sy)`
+        : `linear-gradient(90deg,var(--line)1px,transparent 1px var(--sx))calc(var(--sx)*${grid.shiftX})50%/var(--sx)var(--sy),linear-gradient(var(--line)1px,transparent 1px var(--sy))0% calc(var(--sy)*${grid.shiftY})/var(--sx)var(--sy)`
       : "none",
     ...(mask.enabled && {
       WebkitMask: maskGradient,
