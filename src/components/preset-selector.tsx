@@ -16,22 +16,18 @@ export function PresetSelector({ onSelectPreset }: Props) {
       <div className="flex flex-col overflow-visible h-50">
         <div className="flex-1 overflow-y-auto overflow-x-hidden px-0 pb-0 min-h-0 grid grid-cols-3 gap-2 content-start">
           {PRESETS.map((preset) => (
-            <div
+            <button
               key={preset.name}
-              className="relative w-full aspect-square overflow-hidden rounded-md"
+              onClick={() => {
+                onSelectPreset(preset);
+                setSelectedPresetName(preset.name);
+              }}
+              className="w-full aspect-square border-2 relative rounded-md p-1 overflow-hidden transition-all cursor-pointer  border-transparent hover:border-muted-foreground/50 bg-muted/30 aria-pressed:border-foreground"
+              aria-pressed={preset.name === selectedPresetName}
+              title={preset.name}
             >
-              <button
-                key={preset.name}
-                onClick={() => {
-                  onSelectPreset(preset);
-                  setSelectedPresetName(preset.name);
-                }}
-                className="rounded-md border-2 absolute inset-0 p-1 overflow-hidden transition-all cursor-pointer  border-transparent hover:border-muted-foreground/50 bg-muted/30 aria-pressed:border-foreground"
-                aria-pressed={preset.name === selectedPresetName}
-                title={preset.name}
-              />
               <div
-                className="absolute origin-top-left pointer-events-none"
+                className="absolute inset-0 origin-top-left pointer-events-none"
                 style={{
                   width: `${100 / 0.5}%`,
                   height: `${100 / 0.5}%`,
@@ -39,14 +35,13 @@ export function PresetSelector({ onSelectPreset }: Props) {
                 }}
               >
                 <Background
-                  className="absolute"
                   background={preset.background}
                   grid={preset.grid}
                   mask={preset.mask}
                   effect={preset.effect}
                 />
               </div>
-            </div>
+            </button>
           ))}
         </div>
       </div>

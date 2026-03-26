@@ -2,18 +2,11 @@ import type { Config } from "@/types";
 import { computeBackgroundGradient, getGridStyle } from "@/utils";
 import { Grain } from "./effects/grain";
 import { CRT } from "./effects/crt";
-import { cn } from "@/lib/utils";
 
-export function Background({
-  background,
-  effect,
-  grid,
-  mask,
-  className,
-}: Config & { className?: string }) {
+export function Background({ background, effect, grid, mask }: Config) {
   return (
     <div
-      className={cn("absolute inset-0 -z-10", className)}
+      className="absolute inset-0 -z-10"
       style={{
         backgroundColor: background.color,
       }}
